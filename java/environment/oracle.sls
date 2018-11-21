@@ -1,5 +1,9 @@
 {%- from "java/map.jinja" import environment with context %}
 
+{% if grains.proxy is defined %}
+  {% set proxy=' -x {} '.format(grains.proxy)%}
+{% endif %}
+
 {{ environment.prefix }}:
   file.directory:
   - user: root
@@ -9,7 +13,7 @@
 
 download_java_source:
   cmd.run:
-    - name: "curl {{ environment.dl_opts }} '{{ environment.oracle_cookie }}' '{{ environment.source_url }}'"
+    - name: "curl {{proxy}} {{ environment.dl_opts }} '{{ environment.oracle_cookie }}' '{{ environment.source_url }}'"
     - cwd: {{ environment.prefix }}
     - unless: test -d {{ environment.java_real_home }}
     - require:
