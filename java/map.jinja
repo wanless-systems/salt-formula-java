@@ -9,8 +9,8 @@
 {% endif %}
 
 {% set proxy=''%}
-{% if grains.wsp_proxy is defined %}
-  {% set proxy=' -x {} '.format(grains.wsp_proxy)%}
+{% if grains.proxy is defined %}
+  {% set proxy=' -x {} '.format(grains.proxy)%}
 {% endif %}
 
 {%- if pillar.java.environment.get('headless', False) %}
