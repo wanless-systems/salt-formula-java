@@ -8,6 +8,11 @@
 {% set java_build = '27' %}
 {% endif %}
 
+{% set proxy=''%}
+{% if grains.wsp_proxy is defined %}
+  {% set proxy=' -x {} '.format(grains.wsp_proxy)%}
+{% endif %}
+
 {%- if pillar.java.environment.get('headless', False) %}
 {%- set headless_str = "-headless" %}
 {%- endif %}
@@ -38,9 +43,9 @@
 {%- set oracle_cookie = 'Cookie: oraclelicense=accept-securebackup-cookie' %}
 {%- set dl_opts = '-LOH' %}
 {%- if java_version == '8' %}
-{%- set source_url = salt['cmd.run']('curl -s https://lv.binarybabel.org/catalog-api/java/jdk8.txt?p=downloads.tgz') %}
-{%- set version_name = salt['cmd.run']('curl -s https://lv.binarybabel.org/catalog-api/java/jdk8.txt?p=version') %}
-{%- set oracle_file_name = 'jdk-' + salt['cmd.run']('curl -s https://lv.binarybabel.org/catalog-api/java/jdk8.txt?p=version_parsed.major') + 'u' + salt['cmd.run']('curl -s https://lv.binarybabel.org/catalog-api/java/jdk8.txt?p=version_parsed.minor') + '-linux-x64.tar.gz' %}
+{%- set source_url = salt['cmd.run']('curl {} -s https://lv.binarybabel.org/catalog-api/java/jdk8.txt?p=downloads.tgz'.format(proxy)) %}
+{%- set version_name = salt['cmd.run']('curl {} -s https://lv.binarybabel.org/catalog-api/java/jdk8.txt?p=version'.format(proxy) %}
+{%- set oracle_file_name = 'jdk-' + salt['cmd.run']('curl {} -s https://lv.binarybabel.org/catalog-api/java/jdk8.txt?p=version_parsed.major'.format(proxy) + 'u' + salt['cmd.run']('curl {} -s https://lv.binarybabel.org/catalog-api/java/jdk8.txt?p=version_parsed.minor'.format(proxy) + '-linux-x64.tar.gz' %}
 {%- elif (java_version == '9' or java_version == '10') %}
 {%- set java_build = environment.build %}
 {%- set java_release = environment.release %}
