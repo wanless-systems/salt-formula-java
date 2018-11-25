@@ -1,4 +1,4 @@
-{% set java_version = pillar.java.environment.get('version', '7') %}
+{% set java_version = pillar.java.environment.get('version', '8') %}
 
 {% if java_version == '7' %}
 {% set java_release = '76' %}
@@ -41,7 +41,7 @@
 {%- set java_home = environment.home_dir %}
 {%- set prefix = '/usr/share/java' %}
 {%- set oracle_cookie = 'Cookie: oraclelicense=accept-securebackup-cookie' %}
-{%- set dl_opts = '-LOH' %}
+{%- set dl_opts = '-LOH'+proxy %}
 {%- if java_version == '8' %}
 {%- set curl_cmd='curl {} -s '.format(proxy) %}
 {%- set source_url = salt['cmd.run'](curl_cmd+'https://lv.binarybabel.org/catalog-api/java/jdk8.txt?p=downloads.tgz') %}
